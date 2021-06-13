@@ -3,4 +3,5 @@
     <string name="app_nav_item_time">计时</string>
     <string name="app_nav_item_circle">圈子</string>
     <string name="app_nav_item_my">我的</string>
+    <string name="app_daily_selection">每日精选</string>
 </resources>
