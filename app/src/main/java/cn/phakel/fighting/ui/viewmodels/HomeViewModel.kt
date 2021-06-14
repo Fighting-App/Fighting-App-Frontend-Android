@@ -19,12 +19,19 @@ class HomeViewModel: ViewModel() {
         }
     }
 
-    suspend fun banner(): BannerRequest {
+    private suspend fun banner(): BannerRequest {
         val api: Apis = Feign.builder()
             .decoder(GsonDecoder())
-            .target(Apis::class.java, "https://api.xxx.com")
-        return withContext(Dispatchers.IO) {
-            api.banner()
+            .target(Apis::class.java, "https://www.baidu.com")
+
+        return try {
+            withContext(Dispatchers.IO) {
+                api.banner()
+            }
+        } catch(e: Exception) {
+            withContext(Dispatchers.IO) {
+                BannerRequest(500, null)
+            }
         }
     }
 }

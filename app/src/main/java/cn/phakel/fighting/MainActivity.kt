@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import cn.phakel.fighting.ui.Home
 import cn.phakel.fighting.ui.theme.FightingTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -16,7 +18,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             FightingTheme {
                 Surface(color = MaterialTheme.colors.background) {
-                    Home()
+                    val navController = rememberNavController()
+                    Home(navController = navController)
                 }
             }
         }

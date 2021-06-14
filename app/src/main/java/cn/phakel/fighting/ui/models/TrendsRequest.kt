@@ -10,6 +10,6 @@ data class TrendsContent(
     val user: String,
     val time: String,
     val content: String,
-    val img: String,
+    val img: String?,
     val avartar: String
 )
