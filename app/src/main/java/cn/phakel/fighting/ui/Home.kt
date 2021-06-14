@@ -1,5 +1,6 @@
 package cn.phakel.fighting.ui
 
+import android.util.JsonReader
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,9 +25,16 @@ import androidx.compose.ui.unit.sp
 import cn.phakel.fighting.R
 import cn.phakel.fighting.ui.components.Navigation
 import cn.phakel.fighting.ui.components.Tab
+import cn.phakel.fighting.ui.models.BannerRequest
 import cn.phakel.fighting.ui.models.TabItem
 import cn.phakel.fighting.ui.theme.FightingTheme
+import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.gson.Gson
+import okhttp3.Request
+import okhttp3.OkHttpClient
+import org.json.JSONObject
+
 
 @ExperimentalPagerApi
 @Composable
@@ -41,14 +49,14 @@ fun Home() {
     MaterialTheme() {
         Scaffold(
             topBar = { Tab(title = stringResource(id = R.string.app_name)) },
-            content = { HomeContent() },
+            content = { HomeContent(getBanner()) },
             bottomBar = { Navigation(tabItems = tabItems) }
         )
     }
 }
 
 @Composable
-fun HomeContent() {
+fun HomeContent(banner: BannerRequest) {
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
             stringResource(id = R.string.app_daily_selection),
@@ -58,16 +66,44 @@ fun HomeContent() {
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        Image(
-            painter = painterResource(id = R.drawable.a),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .clip(RoundedCornerShape(4.dp))
-                .height(240.dp)
-                .fillMaxWidth()
-        )
+        if(banner != null) {
+            Image(
+                painter = rememberCoilPainter(request = banner.url),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .height(240.dp)
+                    .fillMaxWidth()
+            )
+        } else {
+            Image(
+                painter = painterResource(id = R.drawable.a),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .height(240.dp)
+                    .fillMaxWidth()
+            )
+        }
     }
+}
+
+fun getBanner(): BannerRequest {
+    val okHttpClient = OkHttpClient()
+
+    val req = Request.Builder()
+        .url("")
+        .build()
+
+    val data = okHttpClient
+        .newCall(req)
+        .execute()
+        .body()
+        ?.string()
+
+    return Gson().fromJson(data, BannerRequest::class.java)
 }
 
 @ExperimentalPagerApi
